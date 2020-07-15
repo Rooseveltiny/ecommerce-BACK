@@ -1,0 +1,19 @@
+.DS_Store
+env
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.mp4
+*.mp3
+*.jpg
+*.png
+*.svg
+*.jpeg
+*.gif
+*.pyc
