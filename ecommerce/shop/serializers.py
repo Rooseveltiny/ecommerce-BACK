@@ -8,3 +8,12 @@ class ProductsListSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Product
         fields = ('link', 'title', 'unit_of_measurement', 'price', 'balance', 'detail')
+
+class ProductSerializer(serializers.ModelSerializer):
+
+    detail = serializers.StringRelatedField(many=True)
+    
+    class Meta:
+
+        model = Product
+        fields = '__all__'
