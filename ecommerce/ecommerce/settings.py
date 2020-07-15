@@ -25,8 +25,16 @@ SECRET_KEY = 'tx(2sid4w165g#g0@0@$2loz15^s#hc&%y%1$88+58#_^u0xvk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8080',
+    'http://localhost:8081',
+    'http://localhost:8082',
+    'http://127.0.0.1:8080',
+]
+
+# CORS_ORIGIN_ALLOW_ALL=True
 
 # Application definition
 
@@ -40,12 +48,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'shop',
     'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',

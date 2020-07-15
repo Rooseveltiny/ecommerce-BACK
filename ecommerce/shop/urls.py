@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
-from cars.views import *
+from shop.views import *
 
 app_name='shop'
 
 urlpatterns = [
-      
+    path('products/all', ProductsListView.as_view()),
 ]
