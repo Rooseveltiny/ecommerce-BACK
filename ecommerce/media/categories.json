@@ -1,3 +1,96 @@
-{
-    "kek": "kek"
-}
+[
+    {
+        "title": "Профнастил",
+        "image": "",
+        "slug": "profnastil",
+        "children": [
+            {
+                "title": "Профнастил стеновой",
+                "image": "",
+                "slug": "profnastil-stenovoy",
+                "children": [
+                    {
+                        "title": "Профнастил С-8",
+                        "image": "",
+                        "slug": "profnastil-s-8",
+                        "children": ""
+                    },
+                    {
+                        "title": "Профнастил С-10",
+                        "image": "",
+                        "slug": "profnastil-s-10",
+                        "children": ""
+                    },
+                    {
+                        "title": "Профнастил С-21",
+                        "image": "",
+                        "slug": "profnastil-s-21",
+                        "children": ""
+                    },
+                    {
+                        "title": "Профнастил С-20",
+                        "image": "",
+                        "slug": "profnastil-s-20",
+                        "children": ""
+                    }
+                ]
+            },
+            {
+                "title": "Профнастил кровельный",
+                "image": "",
+                "slug": "profnastil-krovelniy",
+                "children": [
+                    {
+                        "title": "Профнастил С-21 ГОСТ",
+                        "image": "",
+                        "slug": "profnastil-s-21gost",
+                        "children": ""
+                    },
+                    {
+                        "title": "Профнастил С-10",
+                        "image": "",
+                        "slug": "profnastil-s-10ferf",
+                        "children": ""
+                    },
+                    {
+                        "title": "Профнастил С-21",
+                        "image": "",
+                        "slug": "profnastil-s-21ferfer",
+                        "children": ""
+                    },
+                    {
+                        "title": "Профнастил С-20",
+                        "image": "",
+                        "slug": "profnastil-s-20erfer",
+                        "children": ""
+                    }
+                ]
+            },
+            {
+                "title": "Металлочерепица",
+                "image": "",
+                "slug": "metallocherepitsa",
+                "children": [
+                    {
+                        "title": "Металлочерепица Каскад",
+                        "image": "",
+                        "slug": "mch-kaskad",
+                        "children": ""
+                    },
+                    {
+                        "title": "Металлочерепица Монтеррей",
+                        "image": "",
+                        "slug": "mch-monterrey",
+                        "children": ""
+                    },
+                    {
+                        "title": "Металлочерепица Даймонд",
+                        "image": "",
+                        "slug": "mch-daimond",
+                        "children": ""
+                    }
+                ]
+            }
+        ]
+    }
+]

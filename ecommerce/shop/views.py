@@ -30,4 +30,4 @@ class Categories(View):
         with default_storage.open("categories.json") as file:
 
             data = json.load(file)
-            return JsonResponse(data)
+            return JsonResponse(data, safe=False)
