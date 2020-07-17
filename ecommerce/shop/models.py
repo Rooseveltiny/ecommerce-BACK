@@ -3,6 +3,16 @@ import uuid
 
 # Create your models here.
 
+class Category(models.Model):
+
+    link = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50)
+
+    def __str__(self):
+
+        return self.title
+
 class DetailGroup(models.Model):
 
     link = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -32,7 +42,9 @@ class Product(models.Model):
     unit_of_measurement = models.CharField(max_length=10, default=None)
     balance = models.DecimalField(max_digits=15, decimal_places=3, default=0)
     detail = models.ManyToManyField(Detail)
+    category = models.ManyToManyField(Category)
 
     def __str__(self):
 
         return self.title
+
