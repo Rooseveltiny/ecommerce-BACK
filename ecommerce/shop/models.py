@@ -8,10 +8,15 @@ class Category(models.Model):
     link = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50)
+    parent = models.ForeignKey("self", blank=True, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
 
         return self.title
+
+    def get_all_children(self):
+
+        return Category.objects.all().filter(parent=self.link)
 
 class DetailGroup(models.Model):
 

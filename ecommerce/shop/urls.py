@@ -8,4 +8,5 @@ urlpatterns = [
     path('products/all', ProductsListView.as_view()),
     path('product/<uuid:pk>', ProductView.as_view()),
     path(('categories'), Categories.as_view()),
+    path(('catalog_structure'), CatalogStructure.as_view()),
 ]

@@ -1,11 +1,11 @@
-from shop.serializers import ProductsListSerializer, ProductSerializer
-from django.http import JsonResponse
-from rest_framework import generics
-from django.shortcuts import render
-from shop.models import Product
-from django.views import View
-from ecommerce import settings
+from shop.serializers import ProductsListSerializer, ProductSerializer, SerializeCatalogStructure
 from django.core.files.storage import default_storage
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render
+from shop.models import Product, Category
+from rest_framework import generics
+from ecommerce import settings
+from django.views import View
 import json
 
 # Create your views here.
@@ -31,3 +31,14 @@ class Categories(View):
 
             data = json.load(file)
             return JsonResponse(data, safe=False)
+
+
+class CatalogStructure(View):
+
+    def get(self, request):
+
+        serializer = SerializeCatalogStructure()
+        serializer.serialize_catalog_structure()
+        json_data = serializer.get_serialized_json()
+
+        return HttpResponse(json_data, content_type="application/json")
