@@ -5,7 +5,7 @@ import uuid
 
 class Category(models.Model):
 
-    link = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    link = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     title = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50)
     parent = models.UUIDField(null=True)

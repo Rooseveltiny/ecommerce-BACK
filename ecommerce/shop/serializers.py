@@ -52,7 +52,7 @@ class SerializeCatalogStructure(object):
                 all_kids_array.append(self._initialize_dict_from_object(kid))
 
         try:
-            parent = str(source_obj.parent.link)
+            parent = str(source_obj.parent)
         except:
             parent = None
 
