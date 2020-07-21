@@ -44,7 +44,7 @@ class SerializeCatalogStructure(object):
         self.all_none_parent_objects = self.all_objects.filter(parent=None)
 
     def _initialize_dict_from_object(self, source_obj):
-        
+
         all_kids_array = []
         all_kids = source_obj.get_all_children()
         if len(all_kids):
@@ -75,4 +75,12 @@ class SerializeCatalogStructure(object):
     def get_serialized_json(self):
 
         return json.dumps(self.cats_array, ensure_ascii=False)
-        
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Category
+        fields = '__all__'
+
