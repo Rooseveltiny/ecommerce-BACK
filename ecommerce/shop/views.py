@@ -51,11 +51,13 @@ class FilterCategoryListView(generics.ListAPIView):
             data.append(
                 {
                     'name': group.title,
+                    'slug': group.slug,
                     'parameters': parameters
                 }
             )
 
         return data
+
 
 class ProductsCategoryListView(generics.ListAPIView):
 

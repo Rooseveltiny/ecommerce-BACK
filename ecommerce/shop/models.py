@@ -1,4 +1,5 @@
 from django.db import models
+from pytils.translit import slugify
 import uuid
 
 # Create your models here.
@@ -30,10 +31,15 @@ class DetailGroup(models.Model):
     link = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50, null=True, unique=True)
 
     def __str__(self):
 
         return self.title
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(DetailGroup, self).save(*args, **kwargs)
 
 
 class Detail(models.Model):
@@ -41,6 +47,11 @@ class Detail(models.Model):
     link = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=50)
     detail_group = models.ForeignKey('DetailGroup', on_delete=models.CASCADE, default=None)
+    slug = models.SlugField(max_length=50, null=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Detail, self).save(*args, **kwargs)
 
     def __str__(self):
 

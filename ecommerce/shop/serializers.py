@@ -13,13 +13,21 @@ class ProductsListSerializer(serializers.ModelSerializer):
                   'price', 'balance', 'detail')
 
 
+class DetailGroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = DetailGroup
+        fields = ('title', 'slug')
+
+
 class DetailsSerializer(serializers.ModelSerializer):
 
-    detail_group = serializers.StringRelatedField()
+    detail_group = DetailGroupSerializer()
 
     class Meta:
         model = Detail
-        fields = ('title', 'link', 'detail_group')
+        fields = ('title', 'link', 'detail_group', 'slug')
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -87,5 +95,6 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class FilterListSerialize(serializers.Serializer):
 
-    name = serializers.CharField(max_length = 200)
+    slug = serializers.CharField(max_length=50)
+    name = serializers.CharField(max_length=50)
     parameters = DetailsSerializer(many=True)
