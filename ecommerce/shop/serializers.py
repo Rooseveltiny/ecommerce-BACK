@@ -84,3 +84,8 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+
+class FilterListSerialize(serializers.Serializer):
+
+    name = serializers.CharField(max_length = 200)
+    parameters = DetailsSerializer(many=True)
