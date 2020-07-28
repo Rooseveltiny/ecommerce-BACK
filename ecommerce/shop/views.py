@@ -78,7 +78,7 @@ class ProductsCategoryListView(generics.ListAPIView):
         # set sort_field
         params = dict(self.request.query_params)
         if 'sort_field' in params:
-            sorting = 'sort_field'
+            sorting = params['sort_field']
             del params['sort_field']
         else:
             sorting = 'link'
