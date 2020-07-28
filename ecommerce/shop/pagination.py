@@ -36,9 +36,10 @@ class CatalogProductsPagination(PageNumberPagination):
 
         pages_links = []
         while not start_page > end_page:
-            
+
             new_link = current_page_link
-            new_link = re.sub(r'page=\d*', 'page={}'.format(start_page), new_link)
+            new_link = re.sub(
+                r'page=\d*', 'page={}'.format(start_page), new_link)
             new_page = {
                 'link': new_link,
                 'is_active': start_page == current_page_number,

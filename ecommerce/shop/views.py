@@ -72,8 +72,29 @@ class ProductsCategoryListView(generics.ListAPIView):
 
     def get_queryset(self):
 
-        category = self.kwargs['category']
-        return Product.objects.filter(category__slug=category)
+        # set category
+        category = self.kwargs['category']   
+
+        # set sort_field
+        params = dict(self.request.query_params)
+        if 'sort_field' in params:
+            sorting = 'sort_field'
+            del params['sort_field']
+        else:
+            sorting = 'link'
+
+        if 'page' in params: del params['page']
+
+        # collect all filter params
+        all_filter_params = []
+        
+        for group in params.keys():
+            for param in params[group]:
+                all_filter_params.append(param)
+
+        kek = 1
+
+        return Product.objects.filter(category__slug=category).order_by(sorting)
 
 
 class ProductView(generics.RetrieveAPIView):
