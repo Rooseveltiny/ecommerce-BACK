@@ -39,7 +39,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SerializeCatalogStructure(object):
+class CatalogStructureSerializer(object):
 
     def __init__(self):
 
@@ -93,7 +93,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class FilterListSerialize(serializers.Serializer):
+class FilterListSerializer(serializers.Serializer):
 
     slug = serializers.CharField(max_length=50)
     name = serializers.CharField(max_length=50)

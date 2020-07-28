@@ -1,6 +1,6 @@
-from shop.serializers import ProductsListSerializer, ProductSerializer, SerializeCatalogStructure, CategorySerializer, FilterListSerialize
+from shop import serializers 
+from shop.pagination import CatalogProductsPagination
 from shop.models import Product, Category
-from ecommerce import settings
 
 from django.core.files.storage import default_storage
 from django.http import JsonResponse, HttpResponse
@@ -10,6 +10,8 @@ from django.views import View
 from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from ecommerce import settings
 import json
 
 # Create your views here.
@@ -17,13 +19,17 @@ import json
 
 class ProductsAllListView(generics.ListAPIView):
 
-    serializer_class = ProductsListSerializer
-    queryset = Product.objects.all()
+    serializer_class = serializers.ProductsListSerializer
+
+    def get_queryset(self):
+
+        queryset = Product.objects.all()
+        return queryset
 
 
 class FilterCategoryListView(generics.ListAPIView):
 
-    serializer_class = FilterListSerialize
+    serializer_class = serializers.FilterListSerializer
 
     def get_queryset(self):
 
@@ -61,7 +67,8 @@ class FilterCategoryListView(generics.ListAPIView):
 
 class ProductsCategoryListView(generics.ListAPIView):
 
-    serializer_class = ProductsListSerializer
+    serializer_class = serializers.ProductsListSerializer
+    pagination_class = CatalogProductsPagination
 
     def get_queryset(self):
 
@@ -71,7 +78,7 @@ class ProductsCategoryListView(generics.ListAPIView):
 
 class ProductView(generics.RetrieveAPIView):
 
-    serializer_class = ProductSerializer
+    serializer_class = serializers.ProductSerializer
     queryset = Product.objects.all()
 
 
@@ -79,7 +86,7 @@ class CatalogStructure(View):
 
     def get(self, request):
 
-        serializer = SerializeCatalogStructure()
+        serializer = serializers.CatalogStructureSerializer()
         serializer.serialize_catalog_structure()
         json_data = serializer.get_serialized_json()
 
@@ -92,7 +99,7 @@ class CategoriesUpdateView(APIView):
 
         queryset = Category.objects.all()
         queryset.delete()
-        serializer = CategorySerializer(data=request.data, many=True)
+        serializer = serializers.CategorySerializer(data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
             return Response("all categories have been created!")
