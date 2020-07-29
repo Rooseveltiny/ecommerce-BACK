@@ -1,4 +1,4 @@
-from shop import serializers 
+from shop import serializers
 from shop.pagination import CatalogProductsPagination
 from shop.models import Product, Category
 
@@ -73,28 +73,32 @@ class ProductsCategoryListView(generics.ListAPIView):
     def get_queryset(self):
 
         # set category
-        category = self.kwargs['category']   
+        category = self.kwargs['category']
 
         # set sort_field
         params = dict(self.request.query_params)
         if 'sort_field' in params:
-            sorting = params['sort_field']
+            sorting = params['sort_field'][0]
             del params['sort_field']
         else:
             sorting = 'link'
 
-        if 'page' in params: del params['page']
+        if 'page' in params:
+            del params['page']
 
         # collect all filter params
         all_filter_params = []
-        
+
         for group in params.keys():
             for param in params[group]:
                 all_filter_params.append(param)
 
-        kek = 1
+        # filter queryset
+        queryset = Product.objects.filter(category__slug=category)
+        if all_filter_params:
+            queryset = queryset.filter(detail__slug__in=all_filter_params)
 
-        return Product.objects.filter(category__slug=category).order_by(sorting)
+        return queryset.order_by(sorting)
 
 
 class ProductView(generics.RetrieveAPIView):
@@ -120,7 +124,8 @@ class CategoriesUpdateView(APIView):
 
         queryset = Category.objects.all()
         queryset.delete()
-        serializer = serializers.CategorySerializer(data=request.data, many=True)
+        serializer = serializers.CategorySerializer(
+            data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
             return Response("all categories have been created!")
