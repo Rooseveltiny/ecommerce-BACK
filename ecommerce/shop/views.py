@@ -96,7 +96,7 @@ class ProductsCategoryListView(generics.ListAPIView):
         # filter queryset
         queryset = Product.objects.filter(category__slug=category)
         if all_filter_params:
-            queryset = queryset.filter(detail__slug__in=all_filter_params)
+            queryset = queryset.filter(detail__slug__in=all_filter_params).distinct()
 
         return queryset.order_by(sorting)
 
