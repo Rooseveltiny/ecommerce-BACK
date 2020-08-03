@@ -87,6 +87,8 @@ class CatalogStructureSerializer(object):
 
 class CategorySerializer(serializers.ModelSerializer):
 
+    is_endpoint = serializers.BooleanField(source='check_is_endpoint')
+
     class Meta:
 
         model = Category
@@ -98,3 +100,5 @@ class FilterListSerializer(serializers.Serializer):
     slug = serializers.CharField(max_length=50)
     name = serializers.CharField(max_length=50)
     parameters = DetailsSerializer(many=True)
+
+

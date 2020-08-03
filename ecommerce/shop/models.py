@@ -25,6 +25,20 @@ class Category(models.Model):
 
         return Category.objects.all().filter(parent=self.link)
 
+    @staticmethod
+    def get_all_kids_by_parants_slug(slug):
+
+        return Category.objects.get(slug=slug).get_all_children()
+
+    @staticmethod
+    def get_all_parentless():
+
+        return Category.objects.filter(parent=None)
+
+    def check_is_endpoint(self):
+
+        return not len(self.get_all_children())
+
 
 class DetailGroup(models.Model):
 
@@ -44,9 +58,11 @@ class DetailGroup(models.Model):
 
 class Detail(models.Model):
 
-    link = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    link = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=50)
-    detail_group = models.ForeignKey('DetailGroup', on_delete=models.CASCADE, default=None)
+    detail_group = models.ForeignKey(
+        'DetailGroup', on_delete=models.CASCADE, default=None)
     slug = models.SlugField(max_length=50, null=True)
 
     def save(self, *args, **kwargs):

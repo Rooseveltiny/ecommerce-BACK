@@ -129,3 +129,17 @@ class CategoriesUpdateView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response("all categories have been created!")
+
+
+class CategoriesView(generics.ListAPIView):
+
+    serializer_class = serializers.CategorySerializer
+
+    def get_queryset(self):
+
+        params = self.request.query_params
+        if not 'parent' in params:
+            return Category.get_all_parentless()
+        else:
+            return Category.get_all_kids_by_parants_slug(params['parent'])
+
