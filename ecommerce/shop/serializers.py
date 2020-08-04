@@ -87,7 +87,7 @@ class CatalogStructureSerializer(object):
 
 class CategorySerializer(serializers.ModelSerializer):
 
-    is_endpoint = serializers.BooleanField(source='check_is_endpoint')
+    is_endpoint = serializers.BooleanField(source='check_is_endpoint', required=False)
 
     class Meta:
 

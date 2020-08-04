@@ -86,17 +86,16 @@ class ProductsCategoryListView(generics.ListAPIView):
         if 'page' in params:
             del params['page']
 
-        # collect all filter params
-        all_filter_params = []
-
-        for group in params.keys():
-            for param in params[group]:
-                all_filter_params.append(param)
-
-        # filter queryset
+        # select filter queryset by category
         queryset = Product.objects.filter(category__slug=category)
-        if all_filter_params:
-            queryset = queryset.filter(detail__slug__in=all_filter_params).distinct()
+
+        # filter by each group params
+        for group in params.keys():
+            groups_params = []
+            for param in params[group]:
+                groups_params.append(param)
+            queryset = queryset.filter(
+                detail__slug__in=groups_params).distinct()
 
         return queryset.order_by(sorting)
 
@@ -142,4 +141,3 @@ class CategoriesView(generics.ListAPIView):
             return Category.get_all_parentless()
         else:
             return Category.get_all_kids_by_parants_slug(params['parent'])
-
