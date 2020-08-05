@@ -34,7 +34,7 @@ class FilterCategoryListView(generics.ListAPIView):
     def get_queryset(self):
 
         category = self.kwargs['category']
-        products_queryset = Product.objects.filter(category__slug=category)
+        products_queryset = Product.objects.filter(category__category_slug=category)
 
         # collect all details and groups
         touple_of_details = set()
@@ -87,7 +87,7 @@ class ProductsCategoryListView(generics.ListAPIView):
             del params['page']
 
         # select filter queryset by category
-        queryset = Product.objects.filter(category__slug=category)
+        queryset = Product.objects.filter(category__category_slug=category)
 
         # filter by each group params
         for group in params.keys():

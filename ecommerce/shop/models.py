@@ -74,6 +74,12 @@ class Detail(models.Model):
         return self.title
 
 
+class ProductCategory(models.Model):
+
+    id = models.AutoField(primary_key=True)
+    category_slug = models.SlugField(max_length=50)
+
+
 class Product(models.Model):
 
     link = models.UUIDField(
@@ -86,7 +92,7 @@ class Product(models.Model):
     unit_of_measurement = models.CharField(max_length=10, default=None)
     balance = models.DecimalField(max_digits=15, decimal_places=3, default=0)
     detail = models.ManyToManyField(Detail)
-    category = models.ManyToManyField(Category)
+    category = models.ManyToManyField(ProductCategory)
 
     def __str__(self):
 
