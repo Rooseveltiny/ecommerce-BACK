@@ -1,6 +1,7 @@
 from shop import serializers
 from shop.pagination import CatalogProductsPagination
-from shop.models import Product, Category
+from shop.models import Product, Category, Detail, DetailGroup
+from shop.views_mixins import ViewUpdateMassMixin
 
 from django.core.files.storage import default_storage
 from django.http import JsonResponse, HttpResponse
@@ -34,7 +35,8 @@ class FilterCategoryListView(generics.ListAPIView):
     def get_queryset(self):
 
         category = self.kwargs['category']
-        products_queryset = Product.objects.filter(category__category_slug=category)
+        products_queryset = Product.objects.filter(
+            category__category_slug=category)
 
         # collect all details and groups
         touple_of_details = set()
@@ -117,19 +119,6 @@ class CatalogStructure(View):
         return HttpResponse(json_data, content_type="application/json")
 
 
-class CategoriesUpdateView(APIView):
-
-    def post(self, request, *args, **kwargs):
-
-        queryset = Category.objects.all()
-        queryset.delete()
-        serializer = serializers.CategorySerializer(
-            data=request.data, many=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response("all categories have been created!")
-
-
 class CategoriesView(generics.ListAPIView):
 
     serializer_class = serializers.CategorySerializer
@@ -141,3 +130,22 @@ class CategoriesView(generics.ListAPIView):
             return Category.get_all_parentless()
         else:
             return Category.get_all_kids_by_parants_slug(params['parent'])
+
+
+class CategoriesUpdateView(ViewUpdateMassMixin):
+
+    model_to_use = Category
+    serializer_to_use = serializers.CategorySerializer
+    model_name = 'Категории'
+
+class DetailGroupsUpdate(ViewUpdateMassMixin):
+
+    model_to_use = DetailGroup
+    serializer_to_use = serializers.DetailGroupSerializer
+    model_name = 'Группы характеристик'
+
+class DetailsUpdateView(ViewUpdateMassMixin):
+
+    model_to_use = Detail
+    serializer_to_use = serializers.DetailsSerializerWithOutDetailGroup
+    model_name = 'Характеристики'

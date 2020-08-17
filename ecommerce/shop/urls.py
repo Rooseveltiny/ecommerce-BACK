@@ -11,5 +11,10 @@ urlpatterns = [
     path('product/<uuid:pk>', ProductView.as_view()),
     path('catalog/categories', CategoriesView.as_view()),
     path(('catalog_structure'), CatalogStructure.as_view()),
+
+    # 1CIntegration
     path(('categories_update'), CategoriesUpdateView.as_view()),
+    path(('detail_groups_update'), DetailGroupsUpdate.as_view()),
+    path(('details_update'), DetailsUpdateView.as_view()),
 ]
+

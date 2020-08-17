@@ -43,7 +43,7 @@ class Category(models.Model):
 class DetailGroup(models.Model):
 
     link = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False)
+        primary_key=True, default=uuid.uuid4, editable=True)
     title = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50, null=True, unique=True)
 
@@ -59,10 +59,10 @@ class DetailGroup(models.Model):
 class Detail(models.Model):
 
     link = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False)
+        primary_key=True, default=uuid.uuid4, editable=True)
     title = models.CharField(max_length=50)
     detail_group = models.ForeignKey(
-        'DetailGroup', on_delete=models.CASCADE, default=None)
+        'DetailGroup', on_delete=models.CASCADE, default=None, null=True)
     slug = models.SlugField(max_length=50, null=True)
 
     def save(self, *args, **kwargs):

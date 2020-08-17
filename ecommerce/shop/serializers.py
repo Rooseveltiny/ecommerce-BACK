@@ -18,7 +18,7 @@ class DetailGroupSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = DetailGroup
-        fields = ('title', 'slug')
+        fields = ('__all__')
 
 
 class DetailsSerializer(serializers.ModelSerializer):
@@ -27,7 +27,13 @@ class DetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Detail
-        fields = ('title', 'link', 'detail_group', 'slug')
+        fields = ('__all__')
+
+class DetailsSerializerWithOutDetailGroup(serializers.ModelSerializer):
+
+    class Meta:
+        model = Detail
+        fields = ('__all__')
 
 
 class ProductSerializer(serializers.ModelSerializer):
