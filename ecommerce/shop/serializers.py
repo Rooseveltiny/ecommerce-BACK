@@ -29,6 +29,7 @@ class DetailsSerializer(serializers.ModelSerializer):
         model = Detail
         fields = ('__all__')
 
+
 class DetailsSerializerWithOutDetailGroup(serializers.ModelSerializer):
 
     class Meta:
@@ -39,6 +40,13 @@ class DetailsSerializerWithOutDetailGroup(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
 
     detail = DetailsSerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
+class ProductSerializerWithOutDetail(serializers.ModelSerializer):
 
     class Meta:
         model = Product
@@ -93,7 +101,8 @@ class CatalogStructureSerializer(object):
 
 class CategorySerializer(serializers.ModelSerializer):
 
-    is_endpoint = serializers.BooleanField(source='check_is_endpoint', required=False)
+    is_endpoint = serializers.BooleanField(
+        source='check_is_endpoint', required=False)
 
     class Meta:
 
@@ -106,5 +115,3 @@ class FilterListSerializer(serializers.Serializer):
     slug = serializers.CharField(max_length=50)
     name = serializers.CharField(max_length=50)
     parameters = DetailsSerializer(many=True)
-
-

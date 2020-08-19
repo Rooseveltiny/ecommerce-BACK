@@ -36,7 +36,7 @@ class FilterCategoryListView(generics.ListAPIView):
 
         category = self.kwargs['category']
         products_queryset = Product.objects.filter(
-            category__category_slug=category)
+            category__slug=category)
 
         # collect all details and groups
         touple_of_details = set()
@@ -89,7 +89,7 @@ class ProductsCategoryListView(generics.ListAPIView):
             del params['page']
 
         # select filter queryset by category
-        queryset = Product.objects.filter(category__category_slug=category)
+        queryset = Product.objects.filter(category__slug=category)
 
         # filter by each group params
         for group in params.keys():
@@ -138,14 +138,23 @@ class CategoriesUpdateView(ViewUpdateMassMixin):
     serializer_to_use = serializers.CategorySerializer
     model_name = 'Категории'
 
+
 class DetailGroupsUpdate(ViewUpdateMassMixin):
 
     model_to_use = DetailGroup
     serializer_to_use = serializers.DetailGroupSerializer
     model_name = 'Группы характеристик'
 
+
 class DetailsUpdateView(ViewUpdateMassMixin):
 
     model_to_use = Detail
     serializer_to_use = serializers.DetailsSerializerWithOutDetailGroup
     model_name = 'Характеристики'
+
+
+class ProductsUpdateView(ViewUpdateMassMixin):
+
+    model_to_use = Product
+    serializer_to_use = serializers.ProductSerializerWithOutDetail
+    model_name = 'Номенклатуры'

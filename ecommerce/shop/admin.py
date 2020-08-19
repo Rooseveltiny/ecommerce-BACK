@@ -4,7 +4,6 @@ from django.contrib import admin
 
 from .models import *
 
-admin.site.register(ProductCategory)
 admin.site.register(DetailGroup)
 admin.site.register(Category)
 admin.site.register(Product)

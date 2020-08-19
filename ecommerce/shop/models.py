@@ -74,25 +74,19 @@ class Detail(models.Model):
         return self.title
 
 
-class ProductCategory(models.Model):
-
-    id = models.AutoField(primary_key=True)
-    category_slug = models.SlugField(max_length=50)
-
-
 class Product(models.Model):
 
     link = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, blank=True)
     price = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     sale_price = models.DecimalField(
         max_digits=15, decimal_places=2, default=0)
     unit_of_measurement = models.CharField(max_length=10, default=None)
     balance = models.DecimalField(max_digits=15, decimal_places=3, default=0)
     detail = models.ManyToManyField(Detail)
-    category = models.ManyToManyField(ProductCategory)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, default=None, null=True)
 
     def __str__(self):
 
