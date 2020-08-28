@@ -54,13 +54,15 @@ class FilterCategoryListView(generics.ListAPIView):
             for detail in touple_of_details:
                 if detail.detail_group == group:
                     parameters.add(detail)
+            parameters = sorted(parameters, key=lambda k: k.title) 
 
             # get data
             data.append(
                 {
                     'name': group.title,
                     'slug': group.slug,
-                    'parameters': parameters
+                    'parameters': parameters,
+                    'input_type': 'checkbox',
                 }
             )
 

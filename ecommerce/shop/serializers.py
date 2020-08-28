@@ -115,3 +115,4 @@ class FilterListSerializer(serializers.Serializer):
     slug = serializers.CharField(max_length=50)
     name = serializers.CharField(max_length=50)
     parameters = DetailsSerializer(many=True)
+    input_type = serializers.CharField(max_length=50)
