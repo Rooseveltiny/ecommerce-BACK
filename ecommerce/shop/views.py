@@ -1,6 +1,6 @@
 from shop import serializers
 from shop.pagination import CatalogProductsPagination
-from shop.models import Product, Category, Detail, DetailGroup
+from shop.models import Product, Category, Detail, DetailGroup, ModelFiles
 from shop.views_mixins import ViewUpdateMassMixin
 
 from django.core.files.storage import default_storage
@@ -134,6 +134,13 @@ class CategoriesView(generics.ListAPIView):
             return Category.get_all_kids_by_parants_slug(params['parent'])
 
 
+class ModelFilesUpdateView(ViewUpdateMassMixin):
+
+    model_to_use = ModelFiles
+    serializer_to_use = serializers.ModelFilesSerializer
+    model_name = 'Ссылки на файлы объектов'
+
+
 class CategoriesUpdateView(ViewUpdateMassMixin):
 
     model_to_use = Category
@@ -151,12 +158,14 @@ class DetailGroupsUpdate(ViewUpdateMassMixin):
 class DetailsUpdateView(ViewUpdateMassMixin):
 
     model_to_use = Detail
-    serializer_to_use = serializers.DetailsSerializerWithOutDetailGroup
+    serializer_to_use = serializers.DetailsSerializerForUpdate
     model_name = 'Характеристики'
 
 
 class ProductsUpdateView(ViewUpdateMassMixin):
 
     model_to_use = Product
-    serializer_to_use = serializers.ProductSerializerWithOutDetail
+    serializer_to_use = serializers.ProductsListSerializerForUpdate
     model_name = 'Номенклатуры'
+
+

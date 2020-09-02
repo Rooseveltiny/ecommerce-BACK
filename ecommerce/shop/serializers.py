@@ -1,36 +1,50 @@
 from rest_framework import serializers
-from shop.models import Detail, DetailGroup, Product, Category
+from shop.models import Detail, DetailGroup, Product, Category, ModelFiles
 import json
+
+class ModelFilesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ModelFiles
+        fields = ('all_images', 'all_files')
 
 
 class ProductsListSerializer(serializers.ModelSerializer):
 
-    detail = serializers.StringRelatedField(many=True)
+    detail = serializers.StringRelatedField(many=True, read_only=True)
+    files = ModelFilesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
-        fields = ('link', 'title', 'unit_of_measurement',
-                  'price', 'balance', 'detail')
+        fields = ('__all__')
 
+
+class ProductsListSerializerForUpdate(serializers.ModelSerializer):
+
+    # all_images = serializers.StringRelatedField(read_only=True, many=True, source='get_all_images')
+
+    class Meta:
+        model = Product
+        fields = ('__all__')
+        
 
 class DetailGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
-
         model = DetailGroup
         fields = ('__all__')
 
 
 class DetailsSerializer(serializers.ModelSerializer):
 
-    detail_group = DetailGroupSerializer()
+    detail_group = DetailGroupSerializer(read_only=True)
 
     class Meta:
         model = Detail
         fields = ('__all__')
 
 
-class DetailsSerializerWithOutDetailGroup(serializers.ModelSerializer):
+class DetailsSerializerForUpdate(serializers.ModelSerializer):
 
     class Meta:
         model = Detail
@@ -39,14 +53,8 @@ class DetailsSerializerWithOutDetailGroup(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
 
-    detail = DetailsSerializer(many=True)
-
-    class Meta:
-        model = Product
-        fields = '__all__'
-
-
-class ProductSerializerWithOutDetail(serializers.ModelSerializer):
+    detail = DetailsSerializer(many=True, read_only=True)
+    files = ModelFilesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
@@ -116,3 +124,5 @@ class FilterListSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=50)
     parameters = DetailsSerializer(many=True)
     input_type = serializers.CharField(max_length=50)
+
+

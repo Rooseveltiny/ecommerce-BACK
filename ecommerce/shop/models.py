@@ -1,8 +1,45 @@
-from django.db import models
 from pytils.translit import slugify
+from django.db import models
 import uuid
+import re
 
 # Create your models here.
+
+
+class ModelFiles(models.Model):
+
+    link = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=True)
+    owner = models.UUIDField(default=uuid.uuid4, editable=True)
+    cloud_link = models.CharField(max_length=300)
+
+    image_expansions = ['jpeg', 'png', 'jpg',
+                        'gif', 'tiff', 'tif', 'wbmp', 'webp', 'svg']
+
+    files_expansions = ['pdf', 'xlsx', 'xls',
+                        'zip', 'gzip', 'doc', 'docx', 'pptx']
+
+    @staticmethod
+    def get_all_files(owner, expansions):
+
+        all_elements = ModelFiles.objects.filter(owner=owner)
+        all_found_files = [element.cloud_link for element in all_elements]
+        all_filtered_links = []
+
+        for found_file in all_found_files:
+            for expansion in expansions:
+                if re.search(expansion+'$', found_file):
+                    all_filtered_links.append(found_file)
+
+        return all_filtered_links
+
+    @staticmethod
+    def get_all_images(owner):
+        return self.get_all_files(owner, ModelFiles.image_expansions)
+
+    @staticmethod
+    def get_all_files_except_images(owner):
+        return self.get_all_files(owner, ModelFiles.files_expansions)
 
 
 class Category(models.Model):
@@ -84,13 +121,17 @@ class Product(models.Model):
     product_code = models.CharField(max_length=30)
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, blank=True)
-    price = models.DecimalField(max_digits=15, decimal_places=2, default=0, editable=True)
+    price = models.DecimalField(
+        max_digits=15, decimal_places=2, default=0, editable=True)
     sale_price = models.DecimalField(
         max_digits=15, decimal_places=2, default=0, editable=True)
     unit_of_measurement = models.CharField(max_length=10, default=None)
-    balance = models.DecimalField(max_digits=15, decimal_places=3, default=0, editable=True)
+    balance = models.DecimalField(
+        max_digits=15, decimal_places=3, default=0, editable=True)
     detail = models.ManyToManyField(Detail, blank=True)
-    category = models.ForeignKey('Category', on_delete=models.SET_NULL, default=None, null=True)
+    category = models.ForeignKey(
+        'Category', on_delete=models.SET_NULL, default=None, null=True)
+    files = models.ManyToManyField(ModelFiles, blank=True)
 
     def __str__(self):
 
@@ -99,3 +140,9 @@ class Product(models.Model):
     def get_details(self):
 
         return self.detail.order_by('link')
+
+    def get_all_images(self):
+
+        return ModelFiles.get_all_images(self.link)
+
+

@@ -17,5 +17,6 @@ urlpatterns = [
     path(('detail_groups_update'), DetailGroupsUpdate.as_view()),
     path(('details_update'), DetailsUpdateView.as_view()),
     path(('products_update'), ProductsUpdateView.as_view()),
+    path(('files_link_update'), ModelFilesUpdateView.as_view()),
 ]
 
