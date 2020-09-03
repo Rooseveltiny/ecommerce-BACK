@@ -12,6 +12,7 @@ class ModelFiles(models.Model):
         primary_key=True, default=uuid.uuid4, editable=True)
     owner = models.UUIDField(default=uuid.uuid4, editable=True)
     cloud_link = models.CharField(max_length=300)
+    title = models.CharField(max_length=100, default='Файл', blank=True)
 
     image_expansions = ['jpeg', 'png', 'jpg',
                         'gif', 'tiff', 'tif', 'wbmp', 'webp', 'svg']
@@ -23,23 +24,23 @@ class ModelFiles(models.Model):
     def get_all_files(owner, expansions):
 
         all_elements = ModelFiles.objects.filter(owner=owner)
-        all_found_files = [element.cloud_link for element in all_elements]
-        all_filtered_links = []
+        all_found_files = [element for element in all_elements]
+        all_filtered_files = []
 
         for found_file in all_found_files:
             for expansion in expansions:
-                if re.search(expansion+'$', found_file):
-                    all_filtered_links.append(found_file)
+                if re.search(expansion+'$', found_file.cloud_link):
+                    all_filtered_files.append(found_file)
 
-        return all_filtered_links
+        return all_filtered_files
 
     @staticmethod
     def get_all_images(owner):
-        return self.get_all_files(owner, ModelFiles.image_expansions)
+        return ModelFiles.get_all_files(owner, ModelFiles.image_expansions)
 
     @staticmethod
     def get_all_files_except_images(owner):
-        return self.get_all_files(owner, ModelFiles.files_expansions)
+        return ModelFiles.get_all_files(owner, ModelFiles.files_expansions)
 
 
 class Category(models.Model):
@@ -131,7 +132,6 @@ class Product(models.Model):
     detail = models.ManyToManyField(Detail, blank=True)
     category = models.ForeignKey(
         'Category', on_delete=models.SET_NULL, default=None, null=True)
-    files = models.ManyToManyField(ModelFiles, blank=True)
 
     def __str__(self):
 
@@ -144,5 +144,9 @@ class Product(models.Model):
     def get_all_images(self):
 
         return ModelFiles.get_all_images(self.link)
+
+    def get_all_files(self):
+
+        return ModelFiles.get_all_files_except_images(self.link)
 
 

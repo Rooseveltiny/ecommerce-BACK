@@ -6,13 +6,14 @@ class ModelFilesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ModelFiles
-        fields = ('all_images', 'all_files')
+        fields = ('__all__')
 
 
 class ProductsListSerializer(serializers.ModelSerializer):
 
     detail = serializers.StringRelatedField(many=True, read_only=True)
     files = ModelFilesSerializer(many=True, read_only=True)
+    all_images = ModelFilesSerializer(read_only=True, many=True, source='get_all_images')
 
     class Meta:
         model = Product
@@ -20,8 +21,6 @@ class ProductsListSerializer(serializers.ModelSerializer):
 
 
 class ProductsListSerializerForUpdate(serializers.ModelSerializer):
-
-    # all_images = serializers.StringRelatedField(read_only=True, many=True, source='get_all_images')
 
     class Meta:
         model = Product
@@ -54,7 +53,8 @@ class DetailsSerializerForUpdate(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
 
     detail = DetailsSerializer(many=True, read_only=True)
-    files = ModelFilesSerializer(many=True, read_only=True)
+    all_images = serializers.StringRelatedField(read_only=True, many=True, source='get_all_images')
+    all_files = ModelFilesSerializer(read_only=True, many=True, source='get_all_files')
 
     class Meta:
         model = Product
