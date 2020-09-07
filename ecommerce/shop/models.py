@@ -13,11 +13,9 @@ class ModelFiles(models.Model):
     owner = models.UUIDField(default=uuid.uuid4, editable=True)
     cloud_link = models.CharField(max_length=300)
     title = models.CharField(max_length=100, default='Файл', blank=True)
-
     image_expansions = ['jpeg', 'png', 'jpg',
                         'gif', 'tiff', 'tif', 'wbmp', 'webp', 'svg']
-
-    files_expansions = ['pdf', 'xlsx', 'xls',
+    files_expansions = ['txt','pdf', 'xlsx', 'xls',
                         'zip', 'gzip', 'doc', 'docx', 'pptx']
 
     @staticmethod
@@ -121,7 +119,7 @@ class Product(models.Model):
         primary_key=True, default=uuid.uuid4, editable=True)
     product_code = models.CharField(max_length=30)
     title = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000, blank=True)
+    description = models.CharField(max_length=1000, blank=True, default="Описания нет")
     price = models.DecimalField(
         max_digits=15, decimal_places=2, default=0, editable=True)
     sale_price = models.DecimalField(

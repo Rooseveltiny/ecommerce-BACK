@@ -53,7 +53,7 @@ class DetailsSerializerForUpdate(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
 
     detail = DetailsSerializer(many=True, read_only=True)
-    all_images = serializers.StringRelatedField(read_only=True, many=True, source='get_all_images')
+    all_images = ModelFilesSerializer(read_only=True, many=True, source='get_all_images')
     all_files = ModelFilesSerializer(read_only=True, many=True, source='get_all_files')
 
     class Meta:
