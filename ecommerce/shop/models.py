@@ -148,3 +148,15 @@ class Product(models.Model):
         return ModelFiles.get_all_files_except_images(self.link)
 
 
+class FeedBack(models.Model):
+
+    feed_back_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=250, blank=False, verbose_name="Ваше имя")
+    company = models.CharField(max_length=100, blank=True, verbose_name="Компания")
+    email = models.EmailField(verbose_name="Электронная почта", blank=False, max_length=100)
+    phone_number = models.CharField(verbose_name="Номер телефона", blank=False, max_length=12)
+    CLIENT_TYPE = (
+        (1, 'Физическое лицо'),
+        (2, 'Юридическое лицо'),
+    )
+    client_type = models.IntegerField(verbose_name='Лицо', choices=CLIENT_TYPE, blank=False)

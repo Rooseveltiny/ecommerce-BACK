@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from shop.models import Detail, DetailGroup, Product, Category, ModelFiles
+from shop.models import Detail, DetailGroup, Product, Category, ModelFiles, FeedBack
 import json
 
 class ModelFilesSerializer(serializers.ModelSerializer):
@@ -126,3 +126,9 @@ class FilterListSerializer(serializers.Serializer):
     input_type = serializers.CharField(max_length=50)
 
 
+class FeedBackSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = FeedBack
+        fields = '__all__'

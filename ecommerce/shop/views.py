@@ -1,13 +1,13 @@
 from shop import serializers
 from shop.pagination import CatalogProductsPagination
-from shop.models import Product, Category, Detail, DetailGroup, ModelFiles
+from shop.models import Product, Category, Detail, DetailGroup, ModelFiles, FeedBack
 from shop.views_mixins import ViewUpdateMassMixin
 
 from django.core.files.storage import default_storage
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
 from django.views import View
 
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -169,3 +169,6 @@ class ProductsUpdateView(ViewUpdateMassMixin):
     model_name = 'Номенклатуры'
 
 
+class FeedBackView(generics.CreateAPIView):
+
+    serializer_class = serializers.FeedBackSerializer
