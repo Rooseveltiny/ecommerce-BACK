@@ -1,5 +1,6 @@
 from pytils.translit import slugify
 from django.db import models
+from shop.models_mixins import GeneralFieldsMixin
 import uuid
 import re
 
@@ -92,7 +93,7 @@ class DetailGroup(models.Model):
         super(DetailGroup, self).save(*args, **kwargs)
 
 
-class Detail(models.Model):
+class Detail(GeneralFieldsMixin):
 
     link = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=True)
