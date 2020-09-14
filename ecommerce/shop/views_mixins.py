@@ -25,3 +25,5 @@ class ViewUpdateMassMixin(APIView):
             serializer.save()
             return Response("{} {}".format(self.model_name, self.success_message))
 
+
+
