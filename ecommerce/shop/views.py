@@ -54,8 +54,12 @@ class FilterCategoryListView(generics.ListAPIView):
             for detail in touple_of_details:
                 if detail.detail_group == group:
                     parameters.add(detail)
-            parameters = sorted(parameters, key=lambda k: k.title) 
 
+            # check whether there's the only one parameter
+            if len(parameters) < 2:
+                continue
+            parameters = sorted(parameters, key=lambda k: k.title) 
+            
             # get data
             data.append(
                 {
