@@ -86,12 +86,17 @@ class CatalogStructureSerializer(object):
         except:
             parent = None
 
+        cat_pic_link = source_obj.get_pic_by_title_in('cat_pic')
+        small_icon_link = source_obj.get_pic_by_title_in('small_icon')
+
         obj = {
             'title': source_obj.title,
             'link': str(source_obj.link),
             'parent': parent,
             'children': all_kids_array,
-            'slug': source_obj.slug
+            'slug': source_obj.slug,
+            'cat_pic_link': cat_pic_link,
+            'small_icon_link': small_icon_link,
         }
 
         return obj

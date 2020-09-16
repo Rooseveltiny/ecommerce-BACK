@@ -76,6 +76,13 @@ class Category(models.Model):
 
         return not len(self.get_all_children())
 
+    def get_pic_by_title_in(self, title):
+
+        images = ModelFiles.get_all_images(self.link)
+        for i in images:
+            if len(re.findall(title, i.title)):
+                return i.cloud_link        
+
 
 class DetailGroup(models.Model):
 
