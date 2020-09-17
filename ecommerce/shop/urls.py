@@ -12,6 +12,7 @@ urlpatterns = [
     path('catalog/categories', CategoriesView.as_view()),
     path(('catalog_structure'), CatalogStructure.as_view()),
     path(('feedback_form'), FeedBackView.as_view()),
+    path(('search_products'), SearchProductsView.as_view()),
 
     # 1CIntegration
     path(('categories_update'), CategoriesUpdateView.as_view()),

@@ -137,3 +137,14 @@ class FeedBackSerializer(serializers.ModelSerializer):
 
         model = FeedBack
         fields = '__all__'
+
+
+class SearchResultSerializer(serializers.Serializer):
+
+    class AdditionalSerializer(serializers.Serializer):
+        title = serializers.StringRelatedField()
+        slug = serializers.StringRelatedField()
+        link = serializers.StringRelatedField()
+
+    products = AdditionalSerializer(many=True)
+    categories = AdditionalSerializer(many=True)

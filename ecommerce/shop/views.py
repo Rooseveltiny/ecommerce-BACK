@@ -12,6 +12,7 @@ from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from shop.additional_modules import CheckGrammar
 from ecommerce import settings
 import json
 
@@ -176,3 +177,37 @@ class ProductsUpdateView(ViewUpdateMassMixin):
 class FeedBackView(generics.CreateAPIView):
 
     serializer_class = serializers.FeedBackSerializer
+
+class SearchProductsView(APIView):
+
+    def make_query(self, input_value):
+
+        products = Product.objects.filter(title__contains=input_value)
+        categories = Category.objects.filter(title__contains=input_value)
+        
+        search_result = {
+            'products': products,
+            'categories': categories,
+        }
+
+        return search_result
+
+    def get_queryset(self):
+
+        input_value = self.request.query_params['search_input_value']
+        search_data = self.make_query(input_value)
+
+        if not len(search_data['products']) and not len(search_data['categories']):
+            input_value = CheckGrammar(input_value).corrected_text
+            if len(input_value):
+                search_data = self.make_query(input_value)
+
+        return search_data
+
+    def get(self, request):
+
+        data = serializers.SearchResultSerializer(self.get_queryset()).data
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+
