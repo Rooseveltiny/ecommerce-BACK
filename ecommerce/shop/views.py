@@ -184,10 +184,12 @@ class SearchProductsView(APIView):
 
         products = Product.objects.filter(title__contains=input_value)
         categories = Category.objects.filter(title__contains=input_value)
-        
+        nothing_found = not len(products) and not len(categories) 
+
         search_result = {
             'products': products,
             'categories': categories,
+            'nothing_found': nothing_found,
         }
 
         return search_result
@@ -197,7 +199,7 @@ class SearchProductsView(APIView):
         input_value = self.request.query_params['search_input_value']
         search_data = self.make_query(input_value)
 
-        if not len(search_data['products']) and not len(search_data['categories']):
+        if search_data['nothing_found']:
             input_value = CheckGrammar(input_value).corrected_text
             if len(input_value):
                 search_data = self.make_query(input_value)

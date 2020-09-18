@@ -146,5 +146,6 @@ class SearchResultSerializer(serializers.Serializer):
         slug = serializers.StringRelatedField()
         link = serializers.StringRelatedField()
 
-    products = AdditionalSerializer(many=True)
-    categories = AdditionalSerializer(many=True)
+    products = AdditionalSerializer(many=True, read_only=True)
+    categories = AdditionalSerializer(many=True, read_only=True)
+    nothing_found = serializers.BooleanField(read_only=True)
