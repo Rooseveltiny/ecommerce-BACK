@@ -71,6 +71,8 @@ class FilterCategoryListView(generics.ListAPIView):
                 }
             )
 
+        # here we can add price
+
         return data
 
 
@@ -177,6 +179,7 @@ class ProductsUpdateView(ViewUpdateMassMixin):
 class FeedBackView(generics.CreateAPIView):
 
     serializer_class = serializers.FeedBackSerializer
+
 
 class SearchProductsView(APIView):
 
