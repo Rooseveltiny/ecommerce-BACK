@@ -179,8 +179,8 @@ class Cart(models.Model):
     price = models.DecimalField(max_digits=15, decimal_places=2, default=0, editable=False, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
     cart_uuid = models.UUIDField(default=uuid.uuid4, editable=True)
-    # user = models
 
-    # def save(self, *args, **kwargs):
-        # self.price = self.product.price
-        # super(DetailGroup, self).save(*args, **kwargs)
+
+    def get_product_object(self):
+
+        return Product.objects.get(link=self.product)

@@ -217,30 +217,34 @@ class SearchProductsView(APIView):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-class CartView(generics.RetrieveUpdateDestroyAPIView):
+class CartListView(generics.ListAPIView):
 
-    queryset = Cart.objects.all()
     serializer_class = serializers.CartSerializer
+
+    def get_queryset(self):
+        return Cart.objects.filter(cart_uuid=self.kwargs['cart_uuid'])
+
 
 class AddToCart(generics.CreateAPIView, generics.UpdateAPIView):
 
     serializer_class = serializers.CartSerializer
 
-    def there_is_product_in_cart(self):
-        return bool(Cart.objects.filter(product=self.data['product'], cart_uuid=self.data['cart_uuid']))
+    def set_product_in_cart_instance(self):
+        self.product_in_cart = Cart.objects.filter(product=self.data['product'], cart_uuid=self.data['cart_uuid']).first()
 
     def addToCart(self):
 
-        if self.there_is_product_in_cart():
+        if self.product_in_cart:
+            self.data['quantity'] = self.product_in_cart.quantity + self.data['quantity']
             return self.validate_and_update()
         else:
             return self.validate_and_create()
 
     def validate_and_update(self):
 
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=self.data, partial=partial)
+        # partial = kwargs.pop('partial', False)
+        instance = self.product_in_cart
+        serializer = self.get_serializer(instance, data=self.data, partial=False)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
@@ -262,10 +266,12 @@ class AddToCart(generics.CreateAPIView, generics.UpdateAPIView):
     def post(self, request, *args, **kwargs):
 
         self.data = request.data.copy()
+        self.set_product_in_cart_instance()
+
         if  request.user.is_authenticated:
             pass
         elif self.data['cart_uuid']:
-            pass
+            return self.addToCart()
         else:
             cart_uuid = uuid4()
             self.data['cart_uuid'] = cart_uuid
