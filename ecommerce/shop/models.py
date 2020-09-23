@@ -1,5 +1,7 @@
 from pytils.translit import slugify
 from django.db import models
+from django.conf import settings
+from django.contrib.auth import get_user_model 
 from shop.models_mixins import GeneralFieldsMixin
 import uuid
 import re
@@ -164,3 +166,21 @@ class FeedBack(models.Model):
         (2, 'Юридическое лицо'),
     )
     client_type = models.IntegerField(verbose_name='Лицо', choices=CLIENT_TYPE, blank=False)
+
+
+class Cart(models.Model):
+
+    id = models.AutoField(primary_key=True)
+    product = models.UUIDField(default=uuid.uuid4, editable=True)
+    quantity = models.DecimalField(
+        max_digits=15, decimal_places=3, default=0, editable=True)
+    product_length = models.DecimalField(max_digits=4, decimal_places=2, default=0, editable=True, null=True)
+    product_quantity = models.IntegerField(editable=True, null=True, default=1)
+    price = models.DecimalField(max_digits=15, decimal_places=2, default=0, editable=False, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
+    cart_uuid = models.UUIDField(default=uuid.uuid4, editable=True)
+    # user = models
+
+    # def save(self, *args, **kwargs):
+        # self.price = self.product.price
+        # super(DetailGroup, self).save(*args, **kwargs)

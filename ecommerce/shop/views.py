@@ -1,6 +1,6 @@
 from shop import serializers
 from shop.pagination import CatalogProductsPagination
-from shop.models import Product, Category, Detail, DetailGroup, ModelFiles, FeedBack
+from shop.models import Product, Category, Detail, DetailGroup, ModelFiles, FeedBack, Cart
 from shop.views_mixins import ViewUpdateMassMixin
 
 from django.core.files.storage import default_storage
@@ -11,10 +11,12 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 
-from shop.additional_modules import CheckGrammar
+from shop.additional_modules import CheckGrammar, set_cookie
 from ecommerce import settings
 import json
+from uuid import uuid4
 
 # Create your views here.
 
@@ -215,4 +217,64 @@ class SearchProductsView(APIView):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+class CartView(generics.RetrieveUpdateDestroyAPIView):
+
+    queryset = Cart.objects.all()
+    serializer_class = serializers.CartSerializer
+
+class AddToCart(generics.CreateAPIView, generics.UpdateAPIView):
+
+    serializer_class = serializers.CartSerializer
+
+    def there_is_product_in_cart(self):
+        return bool(Cart.objects.filter(product=self.data['product'], cart_uuid=self.data['cart_uuid']))
+
+    def addToCart(self):
+
+        if self.there_is_product_in_cart():
+            return self.validate_and_update()
+        else:
+            return self.validate_and_create()
+
+    def validate_and_update(self):
+
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=self.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+    def validate_and_create(self):
+
+        serializer = self.get_serializer(data=self.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def post(self, request, *args, **kwargs):
+
+        self.data = request.data.copy()
+        if  request.user.is_authenticated:
+            pass
+        elif self.data['cart_uuid']:
+            pass
+        else:
+            cart_uuid = uuid4()
+            self.data['cart_uuid'] = cart_uuid
+            response_object = self.addToCart()
+            if response_object.status_code == 201:
+                resp_data = {'cart_uuid': cart_uuid}
+                new_response = JsonResponse(resp_data)
+                return new_response
+            else:
+                return response_object
+        
 

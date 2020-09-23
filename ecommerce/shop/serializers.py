@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from shop.models import Detail, DetailGroup, Product, Category, ModelFiles, FeedBack
+from shop.models import Detail, DetailGroup, Product, Category, ModelFiles, FeedBack, Cart
 import json
 
 class ModelFilesSerializer(serializers.ModelSerializer):
@@ -149,3 +149,11 @@ class SearchResultSerializer(serializers.Serializer):
     products = AdditionalSerializer(many=True, read_only=True)
     categories = AdditionalSerializer(many=True, read_only=True)
     nothing_found = serializers.BooleanField(read_only=True)
+
+
+class CartSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        fields = ('__all__')
+        model = Cart

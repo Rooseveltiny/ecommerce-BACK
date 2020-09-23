@@ -13,6 +13,8 @@ urlpatterns = [
     path(('catalog_structure'), CatalogStructure.as_view()),
     path(('feedback_form'), FeedBackView.as_view()),
     path(('search_products'), SearchProductsView.as_view()),
+    path(('cart/<uuid:pk>'), CartView.as_view()),
+    path(('add_to_cart'), AddToCart.as_view()),
 
     # 1CIntegration
     path(('categories_update'), CategoriesUpdateView.as_view()),
