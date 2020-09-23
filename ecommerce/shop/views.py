@@ -235,7 +235,9 @@ class AddToCart(generics.CreateAPIView, generics.UpdateAPIView):
     def addToCart(self):
 
         if self.product_in_cart:
-            self.data['quantity'] = self.product_in_cart.quantity + self.data['quantity']
+
+            plus_value = self.data['quantity'] if self.data['quantity'] > 0 else self.data['quantity'] * -1
+            self.data['quantity'] = self.product_in_cart.quantity + plus_value
             return self.validate_and_update()
         else:
             return self.validate_and_create()

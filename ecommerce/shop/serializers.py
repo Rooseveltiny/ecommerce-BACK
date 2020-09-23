@@ -153,7 +153,7 @@ class SearchResultSerializer(serializers.Serializer):
 
 class CartSerializer(serializers.ModelSerializer):
 
-    product = ProductSerializer(read_only=True, source='get_product_object')
+    product_object = ProductSerializer(read_only=True, source='get_product_object')
 
     class Meta:
 
