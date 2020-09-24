@@ -225,17 +225,17 @@ class CartListView(generics.ListAPIView):
         return Cart.objects.filter(cart_uuid=self.kwargs['cart_uuid'])
 
 
-class AddToCart(generics.CreateAPIView, generics.UpdateAPIView):
+class AddToCart(generics.CreateAPIView, generics.UpdateAPIView, generics.DestroyAPIView):
 
     serializer_class = serializers.CartSerializer
+    product_in_cart = None
 
     def set_product_in_cart_instance(self):
         self.product_in_cart = Cart.objects.filter(product=self.data['product'], cart_uuid=self.data['cart_uuid']).first()
 
-    def addToCart(self):
+    def add_to_cart(self):
 
         if self.product_in_cart:
-
             plus_value = self.data['quantity'] if self.data['quantity'] > 0 else self.data['quantity'] * -1
             self.data['quantity'] = self.product_in_cart.quantity + plus_value
             return self.validate_and_update()
@@ -265,6 +265,11 @@ class AddToCart(generics.CreateAPIView, generics.UpdateAPIView):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def destroy(self):
+        if self.product_in_cart:
+            self.perform_destroy(self.product_in_cart)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     def post(self, request, *args, **kwargs):
 
         self.data = request.data.copy()
@@ -273,16 +278,19 @@ class AddToCart(generics.CreateAPIView, generics.UpdateAPIView):
         if  request.user.is_authenticated:
             pass
         elif self.data['cart_uuid']:
-            return self.addToCart()
+            return self.add_to_cart()
         else:
             cart_uuid = uuid4()
             self.data['cart_uuid'] = cart_uuid
-            response_object = self.addToCart()
+            response_object = self.add_to_cart()
             if response_object.status_code == 201:
-                resp_data = {'cart_uuid': cart_uuid}
-                new_response = JsonResponse(resp_data)
-                return new_response
+                response_object.data['cart_uuid'] = cart_uuid
+                return response_object
             else:
                 return response_object
         
+    def delete(self, request, *args, **kwargs):
 
+        self.data = request.data.copy()
+        self.set_product_in_cart_instance()
+        return self.destroy()
