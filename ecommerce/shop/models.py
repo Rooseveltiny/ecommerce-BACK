@@ -192,7 +192,7 @@ class Cart(models.Model):
         max_digits=15, decimal_places=3, default=0, editable=True)
     product_length = models.DecimalField(
         max_digits=4, decimal_places=2, default=0, editable=True, null=True)
-    product_quantity = models.IntegerField(editable=True, null=True, default=1)
+    product_quantity = models.IntegerField(editable=True, null=True, default=0)
     price = models.DecimalField(
         max_digits=15, decimal_places=2, default=0, editable=False, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,

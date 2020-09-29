@@ -14,7 +14,7 @@ urlpatterns = [
     path(('feedback_form'), FeedBackView.as_view()),
     path(('search_products'), SearchProductsView.as_view()),
     path(('cart_list/<str:cart_uuid>'), CartListView.as_view()),
-    path(('cart_product'), AddToCart.as_view()),
+    path(('cart_product'), CartView.as_view()),
 
     # 1CIntegration
     path(('categories_update'), CategoriesUpdateView.as_view()),

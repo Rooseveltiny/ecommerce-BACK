@@ -225,12 +225,19 @@ class CartListView(generics.ListAPIView):
         return Cart.objects.filter(cart_uuid=self.kwargs['cart_uuid'])
 
 
-class AddToCart(generics.CreateAPIView, generics.UpdateAPIView, generics.DestroyAPIView):
+class CartView(generics.CreateAPIView, generics.UpdateAPIView, generics.DestroyAPIView):
 
     serializer_class = serializers.CartSerializer
     product_in_cart = None
 
-    def set_product_in_cart_instance(self):
+    def _init_attributes(func):
+        def wrapper_set_attributes(self, request, *args, **kwargs):
+            self.data = request.data.copy()
+            self._set_product_in_cart_instance()
+            return func(self, request, *args, **kwargs)
+        return wrapper_set_attributes
+
+    def _set_product_in_cart_instance(self):
         self.product_in_cart = Cart.objects.filter(product=self.data['product'], cart_uuid=self.data['cart_uuid']).first()
 
     def add_to_cart(self):
@@ -244,7 +251,6 @@ class AddToCart(generics.CreateAPIView, generics.UpdateAPIView, generics.Destroy
 
     def validate_and_update(self):
 
-        # partial = kwargs.pop('partial', False)
         instance = self.product_in_cart
         serializer = self.get_serializer(instance, data=self.data, partial=False)
         serializer.is_valid(raise_exception=True)
@@ -270,10 +276,8 @@ class AddToCart(generics.CreateAPIView, generics.UpdateAPIView, generics.Destroy
             self.perform_destroy(self.product_in_cart)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @_init_attributes
     def post(self, request, *args, **kwargs):
-
-        self.data = request.data.copy()
-        self.set_product_in_cart_instance()
 
         if  request.user.is_authenticated:
             pass
@@ -289,8 +293,13 @@ class AddToCart(generics.CreateAPIView, generics.UpdateAPIView, generics.Destroy
             else:
                 return response_object
         
+    @_init_attributes
     def delete(self, request, *args, **kwargs):
 
-        self.data = request.data.copy()
-        self.set_product_in_cart_instance()
         return self.destroy()
+
+    @_init_attributes
+    def put(self, request, *args, **kwargs):
+
+        return self.validate_and_update()
+
