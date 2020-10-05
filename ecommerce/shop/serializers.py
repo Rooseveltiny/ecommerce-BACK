@@ -56,6 +56,7 @@ class ProductSerializer(serializers.ModelSerializer):
     all_images = ModelFilesSerializer(read_only=True, many=True, source='get_all_images')
     all_files = ModelFilesSerializer(read_only=True, many=True, source='get_all_files')
     details_in_row = serializers.StringRelatedField(read_only=True, source='get_details_in_row')
+    category_title = serializers.StringRelatedField(read_only=True, source='get_category_title_for_seo')
 
     class Meta:
         model = Product

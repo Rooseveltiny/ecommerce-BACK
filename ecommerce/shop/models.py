@@ -164,6 +164,11 @@ class Product(models.Model):
 
         return ModelFiles.get_all_files_except_images(self.link)
 
+    def get_category_title_for_seo(self):
+
+        return self.category.title
+
+
 
 class FeedBack(models.Model):
 
