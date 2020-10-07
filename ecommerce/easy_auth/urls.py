@@ -5,5 +5,6 @@ urlpatterns = [
     path('', include('djoser.urls')),
     path('', include('djoser.urls.authtoken')),
     path('restricted/', views.restricted),
-    path('email/change', views.Email.as_view)
+    path('email/change', views.RestorePassView.as_view()),
+    path('password/change', views.Password.as_view())
 ]

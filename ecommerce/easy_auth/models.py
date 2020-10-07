@@ -15,5 +15,10 @@ class User(AbstractUser):
 
         return self.email
 
+    def get_first_last_name(self):
+
+        return '{} {}'.format(self.first_name, self.last_name)
+
+
 
 
