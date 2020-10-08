@@ -39,6 +39,9 @@ class RestorePassView(APIView):
 
 class Password(APIView):
 
+    '''
+    this method allows to change password by user
+    '''
     def post(self, request, *args, **kwargs):
 
         user = request.auth.user
