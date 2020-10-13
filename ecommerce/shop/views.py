@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from ecommerce import settings
+from shop.additional_modules import CheckGrammar
 import json
 from uuid import uuid4
 

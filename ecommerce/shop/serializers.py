@@ -107,7 +107,9 @@ class CatalogStructureSerializer(object):
 
         self._initialize_all_objects_to_work_with()
         for i in self.all_none_parent_objects:
-            self.cats_array.append(self._initialize_dict_from_object(i))
+            cat_object = self._initialize_dict_from_object(i)
+            if cat_object:
+                self.cats_array.append(cat_object)
 
     def get_serialized_json(self):
 
