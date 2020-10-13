@@ -169,7 +169,6 @@ class Product(models.Model):
         return self.category.title
 
 
-
 class FeedBack(models.Model):
 
     feed_back_id = models.AutoField(primary_key=True)
@@ -207,3 +206,14 @@ class Cart(models.Model):
     def get_product_object(self):
 
         return Product.objects.get(link=self.product)
+
+
+class FAQ(models.Model):
+
+    class Meta:
+        ordering = ('sorting',)
+
+    id = models.AutoField(primary_key=True)
+    sorting = models.IntegerField(blank=True, default=1, editable=True)
+    answer = models.CharField(max_length=4000, editable=True, blank=False)
+    question = models.CharField(max_length=300, editable=True, blank=False)

@@ -1,6 +1,6 @@
 from shop import serializers
 from shop.pagination import CatalogProductsPagination
-from shop.models import Product, Category, Detail, DetailGroup, ModelFiles, FeedBack, Cart
+from shop.models import Product, Category, Detail, DetailGroup, ModelFiles, FeedBack, Cart, FAQ
 from shop.views_mixins import ViewUpdateMassMixin
 
 from django.core.files.storage import default_storage
@@ -13,7 +13,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from shop.additional_modules import CheckGrammar, set_cookie
 from ecommerce import settings
 import json
 from uuid import uuid4
@@ -303,3 +302,9 @@ class CartView(generics.CreateAPIView, generics.UpdateAPIView, generics.DestroyA
 
         return self.validate_and_update()
 
+
+class FAQView(ViewUpdateMassMixin):
+
+    model_to_use = FAQ
+    serializer_to_use = serializers.FAQSerializer
+    model_name = "вопросы и ответы"

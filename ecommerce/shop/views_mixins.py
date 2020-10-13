@@ -1,12 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import fields
-
+from rest_framework.mixins import ListModelMixin
 
 '''
 Mixin for massiv uploading data
 '''
-
 
 class ViewUpdateMassMixin(APIView):
 
@@ -25,5 +24,9 @@ class ViewUpdateMassMixin(APIView):
             serializer.save()
             return Response("{} {}".format(self.model_name, self.success_message))
 
+    def get(self, request, *arg, **kwargs):
+
+        query_set = self.model_to_use.objects.all()
+        return Response(self.serializer_to_use(query_set, many=True).data)
 
 

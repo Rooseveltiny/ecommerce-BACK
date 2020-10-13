@@ -22,5 +22,6 @@ urlpatterns = [
     path(('details_update'), DetailsUpdateView.as_view()),
     path(('products_update'), ProductsUpdateView.as_view()),
     path(('files_link_update'), ModelFilesUpdateView.as_view()),
+    path(('faq'), FAQView.as_view()),
 ]
 

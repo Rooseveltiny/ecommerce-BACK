@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from shop.models import Detail, DetailGroup, Product, Category, ModelFiles, FeedBack, Cart
+from shop.models import Detail, DetailGroup, Product, Category, ModelFiles, FeedBack, Cart, FAQ
 import json
 
 class ModelFilesSerializer(serializers.ModelSerializer):
@@ -154,10 +154,18 @@ class SearchResultSerializer(serializers.Serializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
-
+    
     product_object = ProductSerializer(read_only=True, source='get_product_object')
 
     class Meta:
 
         model = Cart
         fields = ('__all__')
+
+
+class FAQSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = FAQ
+        fields = '__all__'
