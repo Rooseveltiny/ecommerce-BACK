@@ -15,6 +15,7 @@ urlpatterns = [
     path(('search_products'), SearchProductsView.as_view()),
     path(('cart_list/<str:cart_uuid>'), CartListView.as_view()),
     path(('cart_product'), CartView.as_view()),
+    path(('get_category_by_link/<str:category_link>'), CategoryByLinkView.as_view()),
 
     # 1CIntegration
     path(('categories_update'), CategoriesUpdateView.as_view()),

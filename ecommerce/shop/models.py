@@ -8,8 +8,7 @@ import re
 
 # Create your models here.
 
-
-class ModelFiles(models.Model):
+class ModelFiles(GeneralFieldsMixin):
 
     link = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=True)
@@ -44,7 +43,7 @@ class ModelFiles(models.Model):
         return ModelFiles.get_all_files(owner, ModelFiles.files_expansions)
 
 
-class Category(models.Model):
+class Category(GeneralFieldsMixin):
 
     link = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=True)
@@ -85,8 +84,12 @@ class Category(models.Model):
             if len(re.findall(title, i.title)):
                 return i.cloud_link
 
+    def get_all_files(self):
 
-class DetailGroup(models.Model):
+        return ModelFiles.get_all_files_except_images(self.link)
+
+
+class DetailGroup(GeneralFieldsMixin):
 
     link = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=True)
@@ -119,7 +122,7 @@ class Detail(GeneralFieldsMixin):
         return self.title
 
 
-class Product(models.Model):
+class Product(GeneralFieldsMixin):
 
     link = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=True)
@@ -169,7 +172,7 @@ class Product(models.Model):
         return self.category.title
 
 
-class FeedBack(models.Model):
+class FeedBack(GeneralFieldsMixin):
 
     feed_back_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=250, blank=False,
@@ -188,7 +191,7 @@ class FeedBack(models.Model):
         verbose_name='Лицо', choices=CLIENT_TYPE, blank=False)
 
 
-class Cart(models.Model):
+class Cart(GeneralFieldsMixin):
 
     id = models.AutoField(primary_key=True)
     product = models.UUIDField(default=uuid.uuid4, editable=True)
@@ -208,7 +211,7 @@ class Cart(models.Model):
         return Product.objects.get(link=self.product)
 
 
-class FAQ(models.Model):
+class FAQ(GeneralFieldsMixin):
 
     class Meta:
         ordering = ('sorting',)

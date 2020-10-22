@@ -12,6 +12,7 @@ from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import serializers as resializers_meta
 
 from ecommerce import settings
 from shop.additional_modules import CheckGrammar
@@ -129,6 +130,20 @@ class CatalogStructure(View):
 
         return HttpResponse(json_data, content_type="application/json")
 
+
+class CategoryByLinkView(APIView):
+
+    class CategoryViewSerializer(resializers_meta.ModelSerializer):
+
+        files = serializers.ModelFilesSerializer(read_only=True, many=True, source='get_all_files')
+
+        class Meta:
+            model = Category
+            fields = ('link', 'slug', 'files')
+
+    def get(self, request, *args, **kwargs):
+        return Response(self.CategoryViewSerializer(Category.objects.get(link=kwargs['category_link'])).data)
+        
 
 class CategoriesView(generics.ListAPIView):
 
