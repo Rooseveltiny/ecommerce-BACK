@@ -35,7 +35,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:8081',
 ]
 
-CORS_ORIGIN_ALLOW_ALL=True
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'easy_auth',
     'shop',
+    'shop2',
     'djoser',
     'corsheaders',
 ]
@@ -89,16 +90,27 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ecommerce2',
+        'USER': 'postgres',
+        'PASSWORD': 'May9779April9889June',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
 }
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ( 
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
