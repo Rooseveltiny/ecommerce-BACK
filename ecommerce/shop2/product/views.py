@@ -3,7 +3,7 @@ from shop2.category.models import Category
 from shop2.product.models import Product
 from shop2.detail.models import Detail
 from rest_framework.generics import ListAPIView
-from shop2.product.serializers import ProductReadSerializer
+from shop2.product.serializers import ProductReadSerializer, ProductListReadSerializer
 from shop2.paginations import CatalogProductsPagination
 
 
@@ -35,7 +35,7 @@ class LoadProductsView(AbstractLoadingView):
 class ProductsListView(ListAPIView):
 
     pagination_class = CatalogProductsPagination
-    serializer_class = ProductReadSerializer
+    serializer_class = ProductListReadSerializer
     queryset = Product.objects.all()
 
     def filter_queryset_by_category(self):
