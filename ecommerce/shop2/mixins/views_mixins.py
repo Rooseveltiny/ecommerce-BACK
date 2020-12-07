@@ -1,10 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import UpdateAPIView
 from shop2.mixins.serailizers_mixins import AbstractLoadingSerializer
 
 class AbstractLoadingView(APIView):
 
-    look_field = 'link'
+    look_fields = ('link',)
     serailizer_to_use = None
     models_to_use = None
 
@@ -18,14 +19,21 @@ class AbstractLoadingView(APIView):
         serailizer.Meta.model = self.models_to_use
         self.serailizer_to_use = serailizer
 
+        self.updated_elements = 0
+        self.created_elements = 0
+        self.raised_exceptions = []
+
     @property
     def get_response(self):
         return f'Created: {self.created_elements}. Updated: {self.updated_elements}. errors: {self.raised_exceptions}'
 
     def get_instance(self, input_data_item):
 
-        search_kwarg = {self.look_field: input_data_item[self.look_field]}
-        return self.models_to_use.objects.filter(**search_kwarg).first()
+        query_instance = self.models_to_use.objects.all()
+        for search_el in self.look_fields:
+            searching_kwargs = {search_el: input_data_item[search_el]}
+            query_instance = query_instance.filter(**searching_kwargs)
+        return query_instance.first()
 
     def create_or_update(self, instance, input_data_item):
 
@@ -38,7 +46,6 @@ class AbstractLoadingView(APIView):
 
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
 
     def post(self, request, *args, **kwargs):
 

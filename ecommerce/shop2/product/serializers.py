@@ -1,14 +1,15 @@
 from rest_framework import serializers
-from models import Product
+from shop2.product.models import Product
+from shop2.detail.serializers import DetailForProductsListSerializer
 
 class ProductReadSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = Product
-        fields = ('__all__')
-
-class ProductSerializer(serializers.ModelSerializer):
+    files = serializers.DictField(source='all_objects_files')
+    details = DetailForProductsListSerializer(many=True)
 
     class Meta:
         model = Product
         fields = ('__all__')
+
+    
+

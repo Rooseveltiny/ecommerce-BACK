@@ -5,6 +5,7 @@ from shop2.detail.models import DetailGroup, Detail
 
 class LoadDetailView(AbstractLoadingView):
 
+    look_fields = ('link',)
     models_to_use = Detail
     
 

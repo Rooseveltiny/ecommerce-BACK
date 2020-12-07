@@ -3,7 +3,7 @@ from datetime import datetime
 
 class AbstractGenericModel(models.Model):
 
-    marked_to_delete = models.BooleanField(default=False)
+    marked_to_delete = models.BooleanField(default=False, null=False)
 
     class Meta:
 
