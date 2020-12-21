@@ -15,7 +15,7 @@ class Product(AbstractGenericModel, FilesStorage):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, blank=True, default="Описания нет")
     unit_of_measurement = models.CharField(max_length=15)
-    products_category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    products_category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     details = models.ManyToManyField(Detail)
     view_in_catalog = models.BooleanField(default=False)
 

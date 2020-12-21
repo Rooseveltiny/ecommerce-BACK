@@ -6,11 +6,15 @@ from django.db import models
 
 class Category(AbstractGenericModel, FilesStorage):
 
+    class Meta:
+        ordering = ('sorting',)
+
     link = models.UUIDField(default=uuid4, null=False,
                             primary_key=True, editable=True)
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=50, null=False, unique=True)
     parent = models.UUIDField(null=True)
+    sorting = models.PositiveIntegerField(null=False, default=1)
 
     def get_pic_by_title(self, title):
 

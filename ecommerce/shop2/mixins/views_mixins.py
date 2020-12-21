@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.generics import UpdateAPIView
 from shop2.mixins.serailizers_mixins import AbstractLoadingSerializer
 
+
 class AbstractLoadingView(APIView):
 
     look_fields = ('link',)
@@ -25,7 +26,10 @@ class AbstractLoadingView(APIView):
 
     @property
     def get_response(self):
-        return f'Created: {self.created_elements}. Updated: {self.updated_elements}. errors: {self.raised_exceptions}'
+        result = f'Создано элементов: {self.created_elements}. Обновлено элементов: {self.updated_elements}.'
+        if len(self.raised_exceptions):
+            result = f'{result}  Ошибки: {self.raised_exceptions}'
+        return result
 
     def get_instance(self, input_data_item):
 

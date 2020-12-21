@@ -4,13 +4,14 @@ from rest_framework.response import Response
 from shop2.filter_catalog.serializers import DetailSerializer
 import json
 
+
 class FilterCatalogView(APIView):
 
-    def get(self, request, *args, **kwargs):
+    def add_products_details(self):
 
         category = self.kwargs['category']
         products_queryset = Product.objects.filter(
-            products_category__slug=category)
+            products_category__slug=category, view_in_catalog=True)
 
         # collect all details and groups
         touple_of_details = set()
@@ -20,7 +21,6 @@ class FilterCatalogView(APIView):
                 touple_of_details.add(detail)
                 touple_of_groups.add(detail.detail_group)
 
-        data = []
         for group in touple_of_groups:
 
             # collect all parameters
@@ -34,7 +34,7 @@ class FilterCatalogView(APIView):
                 continue
             parameters = sorted(parameters, key=lambda k: k.title)
 
-            data.append(
+            self.filter_object.append(
                 {
                     'name': group.title,
                     'slug': group.slug,
@@ -43,4 +43,9 @@ class FilterCatalogView(APIView):
                 }
             )
 
-        return Response(data, content_type="application/json") 
+    def get(self, request, *args, **kwargs):
+
+        self.filter_object = []
+        self.add_products_details()
+
+        return Response(self.filter_object, content_type="application/json")

@@ -2,7 +2,7 @@ from shop2.mixins.views_mixins import AbstractLoadingView
 from shop2.category.models import Category
 from shop2.product.models import Product
 from shop2.detail.models import Detail
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from shop2.product.serializers import ProductReadSerializer, ProductListReadSerializer
 from shop2.paginations import CatalogProductsPagination
 
@@ -36,7 +36,7 @@ class ProductsListView(ListAPIView):
 
     pagination_class = CatalogProductsPagination
     serializer_class = ProductListReadSerializer
-    queryset = Product.objects.all()
+    queryset = Product.objects.filter(view_in_catalog=True)
 
     def filter_queryset_by_category(self):
 
@@ -75,3 +75,8 @@ class ProductsListView(ListAPIView):
         self.sort_queryset_by_sorting_field()
         return self.queryset
 
+
+class ProductCardView(RetrieveAPIView):
+
+    serializer_class = ProductReadSerializer
+    queryset = Product.objects.all()
